@@ -51,7 +51,7 @@
       args:
         chdir: /opt/semaphore
 
-          #- name: Ensure Semaphore container is running
+          #- name: 
           #docker_container:
           #name: semaphore
           #image: semaphoreui/semaphore:latest
