@@ -2,7 +2,7 @@ resource "google_compute_instance" "default" {
   name         = "my-instance"
   project = google_project.my_project.project_id
   machine_type = "e2-micro"
-  zone         = "europe-west1-c"
+  zone         = var.default_zone
   allow_stopping_for_update = true
   tags         = ["demo-vm-instance"]
 
@@ -25,9 +25,10 @@ resource "google_compute_instance" "default" {
 
   metadata = {
     foo = "bar"
+    ssh-keys = var.ssh_keys
   }
 
-  metadata_startup_script = "sudo apt update && sudo apt install -y nginx"
+  #metadata_startup_script = "sudo apt update && sudo apt install -y nginx"
 
   service_account {
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
@@ -40,7 +41,7 @@ resource "google_compute_instance" "default" {
 resource "google_compute_instance" "default_2" {
     name         = "my-instance2"
     machine_type = "e2-micro"
-    zone         = "europe-west1-c"
+    zone         = var.default_zone
     project = google_project.my_project.project_id
     allow_stopping_for_update = true
     tags         = ["demo-vm-instance"]
@@ -64,9 +65,10 @@ resource "google_compute_instance" "default_2" {
 
     metadata = {
       foo = "bar"
+      ssh-keys = var.ssh_keys
     }
 
-    metadata_startup_script = "sudo apt update && sudo apt install -y nginx"
+    #metadata_startup_script = "sudo apt update && sudo apt install -y nginx"
 
     service_account {
       # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.

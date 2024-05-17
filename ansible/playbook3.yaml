@@ -1,0 +1,63 @@
+- name: Install and Configure Semaphore
+  hosts: GCP
+  become: yes
+
+  tasks:
+    - name: Install Snapd
+      apt:
+        name: snapd
+        state: present
+        update_cache: yes
+
+    - name: Start Snapd service
+      systemd:
+        name: snapd
+        state: started
+        enabled: yes
+
+    - name: Install Semaphore
+      snap:
+        name: semaphore
+        state: present
+
+    - name: Stop Semaphore service if running
+      command: snap stop semaphore
+
+    - name: Create Semaphore directory
+      file:
+        path: /etc/semaphore
+        state: directory
+        mode: '0755'
+
+    - name: Create BoltDB directory
+      file:
+        path: /var/lib/semaphore
+        state: directory
+        mode: '0755'
+
+    - name: Create Semaphore config file from template
+      template:
+        src: config.json.j2
+        dest: /etc/semaphore/config.json
+        mode: '0644'
+
+    - name: Initialize Semaphore database
+      command: |
+        semaphore setup \
+        --config /etc/semaphore/config.json \
+        --db "bolt" \
+        --db-path /var/lib/semaphore/semaphore.db \
+        --admin admin \
+        --admin-email admin@example.com \
+        --admin-password adminpassword
+      args:
+        creates: /var/lib/semaphore/semaphore.db
+
+    - name: Start Semaphore
+      command: snap start semaphore
+
+  vars:
+    semaphore_admin_email: admin@example.com
+    semaphore_admin_username: admin
+    semaphore_admin_password: Thomas62
+

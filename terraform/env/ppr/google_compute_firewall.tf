@@ -4,7 +4,7 @@ resource "google_compute_firewall" "ssh-rule" {
   project = google_project.my_project.project_id
   allow {
     protocol = "tcp"
-    ports = ["22", "80"]
+    ports = ["22", "80", "3000"]
   }
   target_tags = ["demo-vm-instance"]
   source_ranges = ["0.0.0.0/0"]

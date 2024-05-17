@@ -13,5 +13,5 @@ resource "google_compute_instance_group" "webservers" {
     port = "80"
   }
 
-  zone = "europe-west1-c"
+  zone = var.default_zone
 }
